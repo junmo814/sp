@@ -32,77 +32,101 @@ function getoldtodo(){
 
     <div class="content">
       <div class="top">
-
         <?php
-
         if(isset($getuser)){
           $savename = $getuser;
-          $savedate = $getdate;
-          echo '<a class="datechange_btn" href="index.php?user='.$savename.'&date='.date("Y-m-d", strtotime('-1 days')).'"><</a>';
-          echo '<span class="showtime">'.$getdate.'</span>';
-          echo '<a class="datechange_btn" href="index.php?user='.$savename.'&date='.date("Y-m-d", strtotime('+1 days')).'">></a>';
-        } else {
+          $savedate = $getdate; ?>
+          <a class="datechange_btn" href="index.php?user='.$savename.'&date='.date("Y-m-d", strtotime('-1 days')).'"><</a>
+          <span class="showtime"><?=$getdate?></span>
+          <a class="datechange_btn" href="index.php?user='.$savename.'&date='.date("Y-m-d", strtotime('+1 days')).'">></a>
 
-          $i = 0;
-          while($i<count($user)){
-            $username = $user[$i];
-
-            if($username!='.'){
-              if($username!='..'){
-                echo '<li><a class="userlist" href="index.php?user='.$username.'&date='.date("Y-m-d").'">'.$username.'</a></li>';
-              }
-            }
-            $i = $i +1;
-          }
-
-        }
-        ?>
+        <?php } ?>
 
       </div>
 
       <div class="mid">
 
         <?php
-        if(isset($getuser)){
-          $userfile = scandir("./user/".$getuser);
-          $k = 0;
-          $find = 0;
-          while($k<count($userfile)){
-            if($userfile[$k]==$getdate){
+        if(isset($getuser)){ ?>
+          <div class="yesuser"> <?php
+            $userfile = scandir("./user/".$getuser);
+            $k = 0;
+            $find = 0;
+            while($k<count($userfile)){
+              if($userfile[$k]==$getdate){
 
-              $timefile = file_get_contents('./user/'.$getuser.'/'.$getdate);
-              $lists = explode("/", $timefile);
-              $a = 0;
-              $find = 1;
-              while($a<sizeof($lists)-1){
-                $todo = explode(":", $lists[$a]);
-                if($todo[1]=="yes"){
-                  echo '<p class="todo_yes" onclick="'.$todo[1].'.replace(/yes/gi, "no");">'.$todo[0].'</p>';
-                } else{
-                  echo '<p class="todo_no" onclick="'.$todo[1].'.replace(/no/gi, "yes");">'.$todo[0].'</p>';
+                $timefile = file_get_contents('./user/'.$getuser.'/'.$getdate);
+                $lists = explode("/", $timefile);
+                $a = 0;
+                $find = 1;
+                while($a<sizeof($lists)-1){
+                  $todo = explode(":", $lists[$a]);
+                  echo '<div class="todo">';
+                  if($todo[1]=="yes"){
+                      echo '<a class="yes" href="index.php?user='.$getuser.'&date='.$getdate.'&update='.$todo[0].'">'.$todo[0].'</a>';
+
+                      if($_GET['update']==$todo[0]){ ?>
+                        <form class="update" action="update" method="post">
+                          <input type="hidden" name="oldtodo" value="<?=$todo[0]?>">
+                          <input type="text" name="changedtodo" value="<?=$todo[0]?>">
+                          <input type="submit" value="바꾸기">
+                          <a class="btn" href="#">완료</a>
+                        </form>
+
+                      <?php }
+
+
+                      } else{
+                      echo '<a class="no" href="index.php?user='.$getuser.'&date='.$getdate.'&update='.$todo[0].'">'.$todo[0].'</a>';
+
+                      if($_GET['update']==$todo[0]){ ?>
+                        <form class="update" action="update" method="post">
+                          <input type="hidden" name="oldtodo" value="<?=$todo[0]?>">
+                          <input type="text" name="changedtodo" value="<?=$todo[0]?>">
+                          <input type="submit" value="바꾸기">
+                          <a class="btn" href="#">완료취소</a>
+                        </form>
+
+                      <?php }
+                  }
+                  echo '</div>';
+                  $a = $a+1;
                 }
-                $a = $a+1;
+              }
+              $k = $k+1;
+            }
+            if($find==0){
+              echo '<p class="todo">파일이 존재하지 않습니다.</p>';
+            }
+
+            if($_GET['act']=="add")
+            { ?>
+              <div class="content">
+                <form class="add" action="add_act.php" method="post">
+
+                  <input type="hidden" name="username" value=<?=$getuser?>></input>
+                  <input type="hidden" name="date" value=<?=$getdate ?>></input>
+                  <input type="text" name="newtodo" placeholder="새로운 계획을 입력해주세요" required>
+
+                  <input type="submit" value="추가하기">
+                </form>
+              </div>
+            <?php } ?>
+          </div>
+        <?php } else { ?>
+          <div class="nouser"> <?php
+          $i = 0;
+          while($i<count($user)){
+            $username = $user[$i];
+
+            if($username!='.'){
+              if($username!='..'){ ?>
+                <li><a class="userlist" href="index.php?user=<?=$username?>&date=<?=date("Y-m-d")?>"><?=$username?></a></li> <?php
               }
             }
-            $k = $k+1;
-          }
-          if($find==0){
-            echo '<p class="todo">파일이 존재하지 않습니다.</p>';
-          }
-
-          if($_GET['act']=="add")
-          { ?>
-            <div class="content">
-              <form class="add" action="add_act.php" method="post">
-
-                <input type="hidden" name="username" value=<?=$getuser?>></input>
-                <input type="hidden" name="date" value=<?=$getdate ?>></input>
-                <input type="text" name="newtodo" placeholder="새로운 계획을 입력해주세요" required>
-
-                <input type="submit" value="추가하기">
-              </form>
-            </div><?php
-          }
+            $i = $i +1;
+          } ?>
+          </div> <?php
         }
 
         ?>

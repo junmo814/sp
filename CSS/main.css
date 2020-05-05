@@ -13,8 +13,20 @@ body{
 }
 
 .mid{
-  min-height: 380px;
   margin-bottom: 20px;
+}
+
+.nouser{
+  margin-top: 120px;
+  min-height: 280px;
+}
+
+.yesuser{
+  min-height: 400px;
+}
+
+.register{
+  margin-top: 100px;
 }
 
 .goback{
@@ -37,6 +49,7 @@ body{
 }
 
 .btn, input[type=submit]{
+  font-size: 13px;
   background-color: #4CAF50;
   color: white;
   padding: 12px 20px;
@@ -68,19 +81,23 @@ input[type=text]{
   color: orange;
 }
 
-.todo_yes{
+
+.todo{
   font-size: 22px;
-  width: 100%;
+  width: 70%;
+  margin-left: 14%;
   text-decoration: none;
+  border-bottom: 2px solid #f2f2f2;
+  padding: 10px;
+}
+
+.yes{
   color: #999;
   font-weight: 300;
   text-decoration: line-through;
 }
 
-.todo_no{
-  font-size: 22px;
-  width: 100%;
-  text-decoration: none;
+.no{
   color: red;
   font-weight: bold;
 }
@@ -90,4 +107,8 @@ input[type=text]{
   input[type=submit], input[type=text]{
     width: 90%;
   }
+  .todo{
+    font-size: 22px;
+    width: 90%;
+    margin-left: 2%;
 }
